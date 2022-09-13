@@ -1,5 +1,5 @@
-const uc3 = (sequelize:any, Sequelize:any) => {
-    const uc3 = sequelize.define("uc3",{
+const device = (sequelize:any, Sequelize:any) => {
+    const device = sequelize.define("device",{
         // timestamps: false,
         time: {
         type: Sequelize.STRING
@@ -12,9 +12,9 @@ const uc3 = (sequelize:any, Sequelize:any) => {
       }
 
     });
-    uc3.removeAttribute('id');
+    device.removeAttribute('id');
 
-    return uc3;
+    return device;
   };
   
 const customer = (sequelize:any, Sequelize:any) => {
@@ -36,4 +36,4 @@ const customer = (sequelize:any, Sequelize:any) => {
     return customer;
   };
 
-export default {uc3, customer}
+export default {device, customer}

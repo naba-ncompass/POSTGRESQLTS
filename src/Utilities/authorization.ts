@@ -2,7 +2,7 @@
 import dbConfig from "../Config/config";
 import dbconnection from "./db"
 import * as sequelize from "sequelize"; 
-const sq = new sequelize.Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
+const sqConnect = new sequelize.Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
   host: dbConfig.HOST,
   port: dbConfig.PORT,
   dialect: dbConfig.dialect,
@@ -17,15 +17,13 @@ const sq = new sequelize.Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD
   }
 });
 
-const db:any = {};
+const dbConnect:any = {};
+dbConnect.Sequelize = sequelize.Sequelize;
+dbConnect.sequelize = sqConnect;
+dbConnect.device = dbconnection.device(sqConnect, sequelize.Sequelize);
+dbConnect.customer = dbconnection.customer(sqConnect, sequelize.Sequelize);
 
-db.Sequelize = sequelize.Sequelize;
-db.sequelize = sq;
-
-db.uc3 = dbconnection.uc3(sq, sequelize.Sequelize);
-db.customer = dbconnection.customer(sq, sequelize.Sequelize);
-
-export default db ;  
+export default dbConnect ;  
 
 
 

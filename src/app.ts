@@ -12,15 +12,12 @@ app.use(express.urlencoded({ extended: true }));   /* bodyParser.urlencoded() is
 
 // db.sequelize.sync(); //TODO
 
-
-// simple route
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to bezkoder application." });
 });
 
 routeruse(app);
 
-// set port, listen for requests
 const PORT =  8085;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);

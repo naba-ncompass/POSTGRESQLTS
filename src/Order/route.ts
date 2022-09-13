@@ -1,17 +1,17 @@
-import {create,findAll,deleteAll, signup, signin} from "./controller";
+import {insert,readDeviceAll,deleteAll, signup, signin} from "./controller";
 import express from "express";
-import validation from "./validation"
-import validtoken from "../Utilities/verifytoken";
+import {validation,validationust} from "./validation";
+import {verifyToken} from "../Utilities/verifytoken";
 const router = express.Router();
 
 
 const routeruse = (app:any) => {
 
-  router.post("/insert",validtoken.verifyToken,validation.validation,create);  //
-  router.get("/read",validtoken.verifyToken, findAll);
-  router.delete("/deleteall", deleteAll);
-  router.post("/signup",signup);
-  router.post("/signin", signin);
+  router.post("/insert",      verifyToken,validation,          insert);  //
+  router.get("/read",         verifyToken,                     readDeviceAll);
+  router.delete("/deleteall", verifyToken,                     deleteAll);
+  router.post("/signup",                  validationust,       signup);
+  router.post("/signin",                  validationust,       signin);
   app.use("/", router);
 };
   
