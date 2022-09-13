@@ -1,4 +1,5 @@
 import {IsNumber, validate,validateOrReject} from 'class-validator';
+
 export class Post {
   time: string;
   device: string;

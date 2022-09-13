@@ -8,7 +8,7 @@ const router = express.Router();
 const routeruse = (app:any) => {
 
   router.post("/insert",validtoken.verifyToken,validation.validation,create);  //
-  router.get("/read", findAll);
+  router.get("/read",validtoken.verifyToken, findAll);
   router.delete("/deleteall", deleteAll);
   router.post("/signup",signup);
   router.post("/signin", signin);

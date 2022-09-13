@@ -1,5 +1,6 @@
 import db  from "../Utilities/authorization";
 import verifytoken from "../Utilities/verifytoken";
+import DBCOnfig from "../Config/config"
 import bcrypt from 'bcrypt';
 import express from 'express';
 import jwt from 'jsonwebtoken';
@@ -10,17 +11,10 @@ const Op = db.Sequelize.Op;
 // Create and Save a new Tutorial
 export const create = async(req:express.Request, res:express.Response) => {
   const PHONE_NO = verifytoken.getDecodedPh(req,res);
-  
-  // customeruc3.findByPk(PHONE_NO)
-  // .then((data:express.Response) => {
-  //   res.send(data);
-  // })
   var condition = PHONE_NO ? { PHONE_NO: { [Op.iLike]: `%${PHONE_NO}%` } } : null;
 
   const dev = await customeruc3.findAll({ where: condition })
   const [customer] = dev
-   console.log(customer.dataValues.DEVICE)
-
     const uc3 = {
       time: req.body.time,
       device: customer.dataValues.DEVICE,
@@ -38,8 +32,15 @@ export const create = async(req:express.Request, res:express.Response) => {
       });
 };
 
-export const findAll = (req:any, res:any) => {
-    deviceuc3.findAll()
+export const findAll = async(req:express.Request, res:express.Response) => {
+  const PHONE_NO = verifytoken.getDecodedPh(req,res);
+  var condition = PHONE_NO ? { PHONE_NO: `${PHONE_NO}`  } : null;
+
+  const dev = await customeruc3.findAll({ where: condition })
+  const [customer] = dev
+  const DEVICE = (customer.dataValues.DEVICE)
+  var condition2 = DEVICE ? { device: `${DEVICE}`  } : null;
+    deviceuc3.findAll({where : condition2 })
       .then((data:any) => {
         res.send(data);
       })
@@ -113,14 +114,12 @@ export const signup = async(req:express.Request, res:express.Response) => {
 };
 
 export const signin = async(req:express.Request, res:express.Response) => {
-  const SECRET = "eiuehdufedfeifh";
    const user = await customeruc3.findOne({ where : {PHONE_NO : req.body.PHONE_NO }});
-   console.log(req.body.PASSWORD);
  if(user){
     let password_valid = await bcrypt.compare(req.body.PASSWORD,user.dataValues.PASSWORD);
     if(password_valid){
-        let token = jwt.sign({"PHONE_NO" : user.dataValues.PHONE_NO,"PASSWORD":user.dataValues.PASSWORD },SECRET);
-        res.status(200).json({ token : token });
+        let token = jwt.sign({"PHONE_NO" : user.dataValues.PHONE_NO,"PASSWORD":user.dataValues.PASSWORD },DBCOnfig.token);
+        res.status(200).json({message:"SUCESSFUL LOGIN" , token : token });
     } else {
       res.status(400).json({ error : "Password Incorrect" });
     }
