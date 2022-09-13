@@ -2,8 +2,6 @@ import {IsNumber, validate,validateOrReject} from 'class-validator';
 export class Post {
   time: string;
   device: string;
-
-  @IsNumber()
   consumption: number;
 }
 interface valuepass {
@@ -22,7 +20,7 @@ function validation(req:any,res:any,next:any) {
   validate(post).then(errors => {
   // errors is an array of validation errors
   if (errors.length > 0) {
-    console.log('validation failed. errors: ', errors);
+    res.status(400).json({errors : 'validation failed. errors: '});
   } else {
     console.log('validation succeed');
     next();

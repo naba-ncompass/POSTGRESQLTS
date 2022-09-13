@@ -1,4 +1,5 @@
 import db  from "../Utilities/authorization";
+import verifytoken from "../Utilities/verifytoken";
 import bcrypt from 'bcrypt';
 import express from 'express';
 import jwt from 'jsonwebtoken';
@@ -7,10 +8,22 @@ const customeruc3 =db.customer;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new Tutorial
-export const create = (req:express.Request, res:express.Response) => {
+export const create = async(req:express.Request, res:express.Response) => {
+  const PHONE_NO = verifytoken.getDecodedPh(req,res);
+  
+  // customeruc3.findByPk(PHONE_NO)
+  // .then((data:express.Response) => {
+  //   res.send(data);
+  // })
+  var condition = PHONE_NO ? { PHONE_NO: { [Op.iLike]: `%${PHONE_NO}%` } } : null;
+
+  const dev = await customeruc3.findAll({ where: condition })
+  const [customer] = dev
+   console.log(customer.dataValues.DEVICE)
+
     const uc3 = {
       time: req.body.time,
-      device: req.body.device,
+      device: customer.dataValues.DEVICE,
       consumption: req.body.consumption
     };
     deviceuc3.create(uc3)
@@ -59,13 +72,13 @@ export const deleteAll = (req:express.Request, res:express.Response) => {
 export const update = (req:express.Request, res:express.Response) => {
   const device = req.params.device;
 
-  deviceuc3.update(req.body, {
+  customeruc3.update(req.body, {
     where: { device: device }
   })
     .then((num:any) => {
       if (num == 1) {
         res.send({
-          message: "uc3 was updated successfully."
+          message: "customer was updated successfully."
         });
       } else {
         res.send({

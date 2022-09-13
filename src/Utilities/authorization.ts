@@ -1,7 +1,7 @@
 
 import dbConfig from "../Config/config";
 import dbconnection from "./db"
-import * as sequelize from "sequelize";
+import * as sequelize from "sequelize"; 
 const sq = new sequelize.Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
   host: dbConfig.HOST,
   port: dbConfig.PORT,
@@ -16,7 +16,6 @@ const sq = new sequelize.Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD
     idle: dbConfig.pool.idle
   }
 });
-console.log(dbConfig)
 
 const db:any = {};
 
